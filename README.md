@@ -8,12 +8,17 @@ Este projeto é uma página web simples que permite abrir o WhatsApp com um núm
 - Botão para abrir o WhatsApp Web com o número inserido.
 - Funções de limpar, apagar dígitos e validar o número inserido.
 
+## Estrutura do Projeto
+
+- **index.html**: Arquivo principal HTML.
+- **css/styles.css**: Arquivo de estilo CSS.
+- **js/script.js**: Arquivo de script JavaScript.
+
 ## Como Usar
 
-1. Clone ou baixe o repositório.
-2. Abra o arquivo `index.html` no seu navegador.
-3. Digite um número de telefone usando os botões disponíveis na página.
-4. Clique em "Abrir WhatsApp" para abrir o WhatsApp Web com o número inserido.
+1. Edite o arquivo `index.html` conforme necessário.
+2. Adicione ou modifique estilos no `css/styles.css`.
+3. Adicione ou modifique funcionalidades no `js/script.js`.
 
 ## Tecnologias Utilizadas
 
