@@ -1,0 +1,73 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #000107;
+    color: white;
+}
+
+.container {
+    background-color: #121212;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+    text-align: center;
+}
+
+.display {
+    font-size: 24px;
+    margin-bottom: 20px;
+    border: 1px solid #555;
+    padding: 10px;
+    border-radius: 4px;
+    min-height: 40px;
+    color: white;
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+.clear-btn, .backspace-btn, .open-btn {
+    background-color: #25d36563;
+}
+
+.clear-btn:hover, .backspace-btn:hover, .open-btn:hover {
+    background-color: #006400;
+}
+
+.clear-btn:active, .backspace-btn:active, .open-btn:active {
+    background-color: #003300;
+    transition: background-color 0.3s;
+}
+
+/* Botão Abrir WhatsApp */
+.open-btn {
+    background-color: #004d00; /* Verde escuro */
+    color: white;
+    margin-top: 20px; /* Aumenta a distância do botão */
+    padding: 15px; /* Ajuste o tamanho do botão */
+    width: 100%; /* Mantém o botão com largura total */
+    border-radius: 4px; /* Bordas arredondadas */
+}
