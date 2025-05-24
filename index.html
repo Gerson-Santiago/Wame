@@ -4,37 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abrir WhatsApp</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Referência ao arquivo CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define a fonte Inter para todo o corpo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Cor de fundo suave */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Garante que o corpo ocupe a altura total da viewport */
+            margin: 0;
+        }
+        /* Estilos adicionais para centralizar e dar um visual agradável */
+        .card-container {
+            background-color: white;
+            padding: 2.5rem; /* Padding maior para mobile */
+            border-radius: 1.5rem; /* Cantos mais arredondados */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+            text-align: center;
+            max-width: 90%; /* Largura máxima para mobile */
+            width: 400px; /* Largura fixa para desktop */
+        }
+        @media (min-width: 640px) { /* Ajustes para telas maiores */
+            .card-container {
+                padding: 3rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="card-container">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Abrir WhatsApp</h1>
 
-<div class="container">
-    <h2>Abrir WhatsApp</h2>
-    <div class="display" id="display">+55</div>
-    <div class="button-container">
-        <button onclick="addDigit('1')">1</button>
-        <button onclick="addDigit('2')">2</button>
-        <button onclick="addDigit('3')">3</button>
-        <button onclick="addDigit('4')">4</button>
-        <button onclick="addDigit('5')">5</button>
-        <button onclick="addDigit('6')">6</button>
-        <button onclick="addDigit('7')">7</button>
-        <button onclick="addDigit('8')">8</button>
-        <button onclick="addDigit('9')">9</button>
-        <button class="clear-btn" onclick="clearDisplay()">Limpar</button>
-        <button onclick="addDigit('0')">0</button>
-        <button class="backspace-btn" onclick="backspace()">Apagar</button>
+        <div class="mb-6">
+            <label for="phoneNumber" class="block text-gray-700 text-lg font-semibold mb-2">
+                Número de Telefone:
+            </label>
+            <input
+                type="tel"
+                id="phoneNumber"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900 text-lg"
+                placeholder="Ex: 5511987654321"
+                aria-label="Número de Telefone"
+            />
+            <p class="text-sm text-gray-500 mt-2">
+                Inclua o código do país e o DDD (sem espaços ou caracteres especiais).
+                <br>Ex: 55 (Brasil) 11 (São Paulo) 9876543210 (Número)
+            </p>
+        </div>
+
+        <button
+            id="openWhatsappBtn"
+            class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 text-xl"
+        >
+            Abrir no WhatsApp
+        </button>
+
+        <div id="messageBox" class="mt-6 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden" role="alert">
+            </div>
     </div>
-    <button class="open-btn" onclick="abrirWhatsApp()">Abrir WhatsApp</button>
-</div>
 
-<footer>
+    <script>
+        // Obtém referências para os elementos HTML
+        const phoneNumberInput = document.getElementById('phoneNumber');
+        const openWhatsappBtn = document.getElementById('openWhatsappBtn');
+        const messageBox = document.getElementById('messageBox');
 
-<a href="https://github.com/Gerson-Santiago/Wame">https://github.com/Gerson-Santiago/Wame</a><br>
+        // Função para exibir mensagens na caixa de mensagem
+        function showMessage(message, type = 'error') {
+            messageBox.textContent = message;
+            messageBox.className = `mt-6 p-4 rounded-lg ${type === 'error' ? 'bg-red-100 text-red-700 border border-red-300' : 'bg-green-100 text-green-700 border border-green-300'} block`;
+        }
 
-Desenvolvido por Gerson Santiago 2024
-</footer>
+        // Função para ocultar a caixa de mensagem
+        function hideMessageBox() {
+            messageBox.classList.add('hidden');
+        }
 
-<script src="script.js"></script> <!-- Referência ao arquivo JavaScript -->
+        // Adiciona um ouvinte de evento de clique ao botão
+        openWhatsappBtn.addEventListener('click', () => {
+            hideMessageBox(); // Oculta qualquer mensagem anterior
+
+            const phoneNumber = phoneNumberInput.value.trim(); // Obtém o número e remove espaços em branco
+
+            // Validação básica do número de telefone
+            if (!phoneNumber) {
+                showMessage('Por favor, digite um número de telefone.');
+                return;
+            }
+
+            // Remove caracteres não numéricos do número de telefone
+            const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
+
+            if (cleanedPhoneNumber.length < 10) { // Um número de telefone válido geralmente tem pelo menos 10 dígitos (país + ddd + número)
+                showMessage('Número de telefone inválido. Por favor, inclua o código do país e o DDD.');
+                return;
+            }
+
+            // Constrói a URL do WhatsApp
+            const whatsappUrl = `https://wa.me/${cleanedPhoneNumber}`;
+
+            // Abre a URL em uma nova aba
+            window.open(whatsappUrl, '_blank');
+        });
+
+        // Opcional: Limpa a mensagem de erro quando o usuário começa a digitar novamente
+        phoneNumberInput.addEventListener('input', hideMessageBox);
+    </script>
 </body>
 </html>
