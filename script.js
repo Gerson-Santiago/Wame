@@ -23,7 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.disabled = true;
 
     // Tentar abrir no app nativo (vai disparar seletor de apps instalados no SO)
+    if (/Android/i.test(navigator.userAgent)) {
+    window.location.href = `intent://send/?phone=${fullNumber}#Intent;scheme=smsto;package=com.whatsapp;package=com.whatsapp.w4b;end`;
+    } else {
     window.location.href = `whatsapp://send?phone=${fullNumber}`;
+    }
 
     // Fallback: após 1s, abrir no WhatsApp Web
     setTimeout(() => {
