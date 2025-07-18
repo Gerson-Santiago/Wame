@@ -1,512 +1,215 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrir WhatsApp</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
-    <meta name="theme-color" content="#00A884">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --md-sys-color-primary: #00A884;
-            --md-sys-color-on-primary: #FFFFFF;
-            --md-sys-color-primary-container: #E8F5E8;
-            --md-sys-color-on-primary-container: #002114;
-            --md-sys-color-surface: #FEFBFF;
-            --md-sys-color-on-surface: #1C1B1F;
-            --md-sys-color-surface-variant: #F4EFF4;
-            --md-sys-color-on-surface-variant: #49454F;
-            --md-sys-color-outline: #79747E;
-            --md-sys-color-outline-variant: #CAC4D0;
-            --md-sys-color-error: #BA1A1A;
-            --md-sys-color-on-error: #FFFFFF;
-            --md-sys-color-error-container: #FFDAD6;
-            --md-sys-color-on-error-container: #410002;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abrir WhatsApp</title>
 
-        * {
-            box-sizing: border-box;
-        }
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/Wame/manifest.json" />
+  <meta name="theme-color" content="#00A884" />
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #E8F5E8 0%, #F0F2F5 100%);
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
+  <!-- Favicons & App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/Wame/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/Wame/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/Wame/apple-touch-icon.png" />
 
-        .container {
-            background: var(--md-sys-color-surface);
-            border-radius: 28px;
-            padding: 32px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.12);
-            width: 100%;
-            max-width: 480px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+  <!-- Fonts & Icons -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
 
-        .container:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.16);
-        }
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-        .header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .header-icon {
-            background: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 40px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .title {
-            font-size: 32px;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface);
-            margin: 0 0 8px 0;
-        }
-
-        .subtitle {
-            font-size: 16px;
-            color: var(--md-sys-color-on-surface-variant);
-            margin: 0;
-        }
-
-        .input-group {
-            margin-bottom: 24px;
-        }
-
-        .input-label {
-            display: block;
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface);
-            margin-bottom: 8px;
-        }
-
-        .input-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            background: var(--md-sys-color-surface-variant);
-            border-radius: 16px;
-            border: 2px solid var(--md-sys-color-outline-variant);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .input-container:focus-within {
-            border-color: var(--md-sys-color-primary);
-            background: var(--md-sys-color-surface);
-            box-shadow: 0 0 0 4px rgba(0, 168, 132, 0.12);
-        }
-
-        .country-code {
-            padding: 16px 12px;
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant);
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            min-width: 80px;
-            text-align: center;
-            border-right: 1px solid var(--md-sys-color-outline-variant);
-        }
-
-        .country-code:focus {
-            outline: none;
-        }
-
-        .phone-input {
-            flex: 1;
-            padding: 16px;
-            font-size: 16px;
-            color: var(--md-sys-color-on-surface);
-            background: transparent;
-            border: none;
-            outline: none;
-        }
-
-        .phone-input::placeholder {
-            color: var(--md-sys-color-outline);
-        }
-
-        .input-help {
-            font-size: 14px;
-            color: var(--md-sys-color-on-surface-variant);
-            margin-top: 8px;
-            line-height: 1.4;
-        }
-
-        .btn-primary {
-            width: 100%;
-            background: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-            border: none;
-            border-radius: 20px;
-            padding: 16px 24px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 4px 12px rgba(0, 168, 132, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-
-        .btn-primary:active::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .message-box {
-            margin-top: 24px;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 1.4;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transform: translateY(-10px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .message-box.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .message-box.error {
-            background: var(--md-sys-color-error-container);
-            color: var(--md-sys-color-on-error-container);
-        }
-
-        .message-box.success {
-            background: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-        }
-
-        .loading {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid transparent;
-            border-top: 2px solid currentColor;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 640px) {
-            .container {
-                padding: 24px;
-                margin: 8px;
-            }
-
-            .title {
-                font-size: 28px;
-            }
-
-            .header-icon {
-                width: 64px;
-                height: 64px;
-                font-size: 32px;
-            }
-        }
-    </style>
+  <!-- Custom Styles -->
+  <style>
+    :root {
+      --md-sys-color-primary: #00A884;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #e8f5e8;
+      --md-sys-color-on-primary-container: #002114;
+      --md-sys-color-surface: #fefbff;
+      --md-sys-color-on-surface: #1c1b1f;
+      --md-sys-color-surface-variant: #f4eff4;
+      --md-sys-color-on-surface-variant: #49454f;
+      --md-sys-color-outline: #79747e;
+      --md-sys-color-outline-variant: #cac4d0;
+      --md-sys-color-error: #ba1a1a;
+      --md-sys-color-on-error: #ffffff;
+      --md-sys-color-error-container: #ffdad6;
+      --md-sys-color-on-error-container: #410002;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e8f5e8 0%, #f0f2f5 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .container {
+      background: var(--md-sys-color-surface);
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.12);
+      max-width: 480px;
+      width: 100%;
+      transition: box-shadow 0.3s;
+    }
+    .container:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.16);
+    }
+    .header { text-align: center; margin-bottom: 32px; }
+    .header-icon {
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      width: 80px; height: 80px;
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 40px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .title { font-size: 32px; font-weight: 600; color: var(--md-sys-color-on-surface); margin: 0 0 8px; }
+    .subtitle { font-size: 16px; color: var(--md-sys-color-on-surface-variant); margin: 0; }
+    .input-group { margin-bottom: 24px; }
+    .input-label { display: block; font-size: 16px; font-weight: 500; color: var(--md-sys-color-on-surface); margin-bottom: 8px; }
+    .input-container {
+      display: flex; align-items: center;
+      background: var(--md-sys-color-surface-variant);
+      border: 2px solid var(--md-sys-color-outline-variant);
+      border-radius: 16px;
+      transition: all 0.3s;
+    }
+    .input-container:focus-within {
+      border-color: var(--md-sys-color-primary);
+      background: var(--md-sys-color-surface);
+      box-shadow: 0 0 0 4px rgba(0,168,132,0.12);
+    }
+    .country-code {
+      padding: 16px 12px;
+      font-size: 16px; font-weight: 500;
+      color: var(--md-sys-color-on-surface-variant);
+      border: none; background: transparent;
+      min-width: 80px; text-align: center;
+      border-right: 1px solid var(--md-sys-color-outline-variant);
+      cursor: pointer;
+    }
+    .country-code:focus { outline: none; }
+    .phone-input {
+      flex: 1; padding: 16px;
+      font-size: 16px; color: var(--md-sys-color-on-surface);
+      border: none; background: transparent;
+      outline: none;
+    }
+    .phone-input::placeholder { color: var(--md-sys-color-outline); }
+    .input-help { font-size: 14px; color: var(--md-sys-color-on-surface-variant); margin-top: 8px; }
+    .btn-primary {
+      width: 100%; padding: 16px;
+      font-size: 18px; font-weight: 600;
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border: none; border-radius: 20px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      position: relative; overflow: hidden;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,168,132,0.3); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-primary::before {
+      content: '';
+      position: absolute; top:50%; left:50%;
+      width:0; height:0;
+      background: rgba(255,255,255,0.2);
+      border-radius:50%;
+      transform:translate(-50%,-50%);
+      transition: width 0.3s, height 0.3s;
+    }
+    .btn-primary:active::before { width:300px; height:300px; }
+    .message-box {
+      margin-top:24px; padding:16px;
+      border-radius:12px;
+      display:flex; align-items:center; gap:8px;
+      font-size:14px;
+      transform: translateY(-10px); opacity:0;
+      transition: all 0.3s;
+    }
+    .message-box.show { transform: translateY(0); opacity:1; }
+    .message-box.error { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
+    .message-box.success { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+    .loading {
+      display:none; width:20px; height:20px;
+      border:2px solid transparent;
+      border-top:2px solid currentColor;
+      border-radius:50%; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0%{transform:rotate(0deg);}100%{transform:rotate(360deg);} }
+    @media (max-width:640px) {
+      .container { padding:24px; margin:8px; }
+      .title { font-size:28px; }
+      .header-icon { width:64px; height:64px; font-size:32px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="header-icon">
-                <span class="material-icons">chat</span>
-            </div>
-            <h1 class="title">Abrir WhatsApp</h1>
-            <p class="subtitle">Conecte-se rapidamente com seus contatos</p>
-        </div>
+  <div class="container">
+    <header class="header">
+      <div class="header-icon">
+        <span class="material-icons">chat</span>
+      </div>
+      <h1 class="title">Abrir WhatsApp</h1>
+      <p class="subtitle">Conecte-se rapidamente com seus contatos</p>
+    </header>
 
-        <div class="input-group">
-            <label for="phoneNumber" class="input-label">
-                Número de Telefone
-            </label>
-            <div class="input-container">
-                <select class="country-code" id="countryCode">
-                    <option value="+55">🇧🇷 +55</option>
-                    <option value="+1">🇺🇸 +1</option>
-                    <option value="+44">🇬🇧 +44</option>
-                    <option value="+49">🇩🇪 +49</option>
-                    <option value="+33">🇫🇷 +33</option>
-                    <option value="+39">🇮🇹 +39</option>
-                    <option value="+34">🇪🇸 +34</option>
-                    <option value="+351">🇵🇹 +351</option>
-                    <option value="+54">🇦🇷 +54</option>
-                    <option value="+52">🇲🇽 +52</option>
-                </select>
-                <input
-                    type="tel"
-                    id="phoneNumber"
-                    class="phone-input"
-                    placeholder="11987654321"
-                    inputmode="numeric"
-                    pattern="[0-9]*"
-                    aria-label="Número de Telefone"
-                    autocomplete="tel"
-                />
-            </div>
-            <p class="input-help">
-                Digite o DDD + número (ex: 11987654321 para São Paulo)
-            </p>
-        </div>
-
-        <button id="openWhatsappBtn" class="btn-primary">
-            <span class="material-icons"></span>
-            <span id="btnText">Abrir no WhatsApp</span>
-            <div class="loading" id="loading"></div>
-        </button>
-
-        <div id="messageBox" class="message-box">
-            <span class="material-icons" id="messageIcon"></span>
-            <span id="messageText"></span>
-        </div>
+    <div class="input-group">
+      <label for="phoneNumber" class="input-label">Número de Telefone</label>
+      <div class="input-container">
+        <select id="countryCode" class="country-code">
+          <option value="+55">🇧🇷 +55</option>
+          <option value="+1">🇺🇸 +1</option>
+          <!-- outros códigos -->
+        </select>
+        <input id="phoneNumber" class="phone-input" type="tel" placeholder="11987654321" autocomplete="tel" pattern="[0-9]*" inputmode="numeric" />
+      </div>
+      <p class="input-help">Digite o DDD + número (ex: 11987654321 para São Paulo)</p>
     </div>
 
-    <script>
-        // Detecta o país do usuário e define o DDI apropriado
-        function detectCountry() {
-            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const countryCode = document.getElementById('countryCode');
-            
-            // Mapeamento básico de timezone para país
-            const timezoneToCountry = {
-                'America/Sao_Paulo': '+55',
-                'America/New_York': '+1',
-                'America/Los_Angeles': '+1',
-                'Europe/London': '+44',
-                'Europe/Berlin': '+49',
-                'Europe/Paris': '+33',
-                'Europe/Rome': '+39',
-                'Europe/Madrid': '+34',
-                'Europe/Lisbon': '+351',
-                'America/Argentina/Buenos_Aires': '+54',
-                'America/Mexico_City': '+52'
-            };
+    <button id="openWhatsappBtn" class="btn-primary">
+      <span id="btnText">Abrir no WhatsApp</span>
+      <div id="loading" class="loading"></div>
+    </button>
 
-            const detectedCountry = timezoneToCountry[timezone] || '+55';
-            countryCode.value = detectedCountry;
-        }
+    <div id="messageBox" class="message-box"><span id="messageIcon" class="material-icons"></span><span id="messageText"></span></div>
+  </div>
 
-        // Elementos DOM
-        const phoneNumberInput = document.getElementById('phoneNumber');
-        const countryCodeSelect = document.getElementById('countryCode');
-        const openWhatsappBtn = document.getElementById('openWhatsappBtn');
-        const messageBox = document.getElementById('messageBox');
-        const messageIcon = document.getElementById('messageIcon');
-        const messageText = document.getElementById('messageText');
-        const btnText = document.getElementById('btnText');
-        const loading = document.getElementById('loading');
+  <!-- Script principal -->
+  <script src="script.js"></script>
 
-        // Inicialização
-        detectCountry();
-
-        // Função para exibir mensagens
-        function showMessage(message, type = 'error') {
-            messageText.textContent = message;
-            messageIcon.textContent = type === 'error' ? 'error' : 'check_circle';
-            messageBox.className = `message-box ${type} show`;
-            
-            // Auto-hide após 5 segundos
-            setTimeout(() => {
-                hideMessage();
-            }, 5000);
-        }
-
-        // Função para ocultar mensagens
-        function hideMessage() {
-            messageBox.classList.remove('show');
-        }
-
-        // Função para mostrar loading
-        function showLoading() {
-            btnText.style.display = 'none';
-            loading.style.display = 'block';
-            openWhatsappBtn.disabled = true;
-        }
-
-        // Função para esconder loading
-        function hideLoading() {
-            btnText.style.display = 'block';
-            loading.style.display = 'none';
-            openWhatsappBtn.disabled = false;
-        }
-
-        // Formatação do número durante a digitação
-        phoneNumberInput.addEventListener('input', (e) => {
-            hideMessage();
-            
-            // Remove caracteres não numéricos
-            let value = e.target.value.replace(/\D/g, '');
-            
-            // Limita o tamanho baseado no país
-            const maxLength = countryCodeSelect.value === '+55' ? 11 : 15;
-            if (value.length > maxLength) {
-                value = value.slice(0, maxLength);
-            }
-            
-            e.target.value = value;
-        });
-
-        // Validação em tempo real
-        phoneNumberInput.addEventListener('blur', () => {
-            const phoneNumber = phoneNumberInput.value.trim();
-            const countryCode = countryCodeSelect.value;
-            
-            if (phoneNumber && !isValidPhoneNumber(phoneNumber, countryCode)) {
-                showMessage('Número de telefone inválido para o país selecionado.', 'error');
-            }
-        });
-
-        // Função de validação
-        function isValidPhoneNumber(number, countryCode) {
-            const cleanNumber = number.replace(/\D/g, '');
-            
-            switch (countryCode) {
-                case '+55': // Brasil
-                    return cleanNumber.length === 11 && cleanNumber.startsWith('1');
-                case '+1': // EUA/Canadá
-                    return cleanNumber.length === 10;
-                case '+44': // Reino Unido
-                    return cleanNumber.length >= 10 && cleanNumber.length <= 11;
-                default:
-                    return cleanNumber.length >= 8 && cleanNumber.length <= 15;
-            }
-        }
-
-        // Evento principal do botão
-        openWhatsappBtn.addEventListener('click', async () => {
-            hideMessage();
-            
-            const phoneNumber = phoneNumberInput.value.trim();
-            const countryCode = countryCodeSelect.value;
-            
-            // Validações
-            if (!phoneNumber) {
-                showMessage('Por favor, digite um número de telefone.', 'error');
-                phoneNumberInput.focus();
-                return;
-            }
-
-            if (!isValidPhoneNumber(phoneNumber, countryCode)) {
-                showMessage('Número de telefone inválido. Verifique o formato.', 'error');
-                phoneNumberInput.focus();
-                return;
-            }
-
-            // Mostra loading
-            showLoading();
-
-            try {
-                // Simula um pequeno delay para melhor UX
-                await new Promise(resolve => setTimeout(resolve, 800));
-                
-                // Constrói a URL do WhatsApp
-                const cleanNumber = phoneNumber.replace(/\D/g, '');
-                const fullNumber = countryCode.replace('+', '') + cleanNumber;
-                const whatsappUrl = `https://wa.me/${fullNumber}`;
-
-                // Abre no WhatsApp
-                window.open(whatsappUrl, '_blank');
-                
-                showMessage('Redirecionando para o WhatsApp...', 'success');
-                
-            } catch (error) {
-                showMessage('Erro ao abrir o WhatsApp. Tente novamente.', 'error');
-            } finally {
-                hideLoading();
-            }
-        });
-
-        // Permite enviar com Enter
-        phoneNumberInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                openWhatsappBtn.click();
-            }
-        });
-
-        // Limpa mensagens quando o usuário muda o código do país
-        countryCodeSelect.addEventListener('change', () => {
-            hideMessage();
-            phoneNumberInput.focus();
-        });
-
-        // Adiciona vibração no mobile (se disponível)
-        function vibrate() {
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
-        }
-
-        // Adiciona feedback tátil aos botões
-        openWhatsappBtn.addEventListener('click', vibrate);
-        countryCodeSelect.addEventListener('change', vibrate);
-    </script>
+  <!-- Register Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/Wame/sw.js')
+          .then(reg => console.log('SW registrado:', reg.scope))
+          .catch(err => console.error('Falha ao registrar SW:', err));
+      });
+    }
+  </script>
 </body>
 </html>
