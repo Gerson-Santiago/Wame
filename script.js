@@ -6,19 +6,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const messageBox = document.getElementById('messageBox');
   const messageIcon = document.getElementById('messageIcon');
   const messageText = document.getElementById('messageText');
+  let messageTimeout;
 
-  // Função para mostrar mensagens para o usuário
+  // Função para mostrar mensagens ao usuário com timeout e limpeza correta
   function showMessage(type, text) {
+    clearTimeout(messageTimeout);
     messageBox.className = `message-box show ${type}`;
     messageIcon.textContent = (type === 'error') ? 'error' : 'check_circle';
     messageText.textContent = text;
-    setTimeout(() => messageBox.classList.remove('show'), 3000);
+    messageTimeout = setTimeout(() => {
+      messageBox.classList.remove('show');
+    }, 3000);
   }
 
-  // Sanitiza e obtém o número completo
+  // Sanitiza e obtém número completo com código do país
   function getFullNumber() {
     const code = countryCode.value.trim();
     const num = phoneInput.value.trim().replace(/\D/g, ''); // só números
+
+    if (!code) {
+      showMessage('error', 'Selecione o código do país.');
+      return null;
+    }
     if (!num) {
       showMessage('error', 'Digite um número de telefone válido.');
       return null;
@@ -26,25 +35,28 @@ document.addEventListener('DOMContentLoaded', () => {
     return code + num;
   }
 
-  // Abre link com fallback para WhatsApp Web
+  // Abre link para WhatsApp app ou web com fallback
   function openWhatsapp(type) {
     const fullNumber = getFullNumber();
     if (!fullNumber) return;
 
     let appUrl;
+
     if (type === 'consumer') {
       appUrl = `whatsapp://send?phone=${fullNumber}`;
     } else if (type === 'business') {
-      appUrl = `whatsapp-business://send?phone=${fullNumber}`;
+      // WhatsApp Business app nem sempre aceita whatsapp-business://
+      // Usar whatsapp:// com parâmetro business
+      appUrl = `whatsapp://send?phone=${fullNumber}&app=business`;
     } else {
       showMessage('error', 'Tipo inválido para WhatsApp.');
       return;
     }
 
-    // Tenta abrir o app WhatsApp (pessoal ou business)
-    window.location.href = appUrl;
+    // Tenta abrir app WhatsApp
+    window.location.assign(appUrl);
 
-    // Após 1 segundo, abre fallback no WhatsApp Web
+    // Após 1 segundo abre fallback no WhatsApp Web
     setTimeout(() => {
       window.open(`https://wa.me/${fullNumber}`, '_blank');
       showMessage('success', `Tentando abrir no WhatsApp ${type === 'consumer' ? 'pessoal' : 'Business'}...`);
