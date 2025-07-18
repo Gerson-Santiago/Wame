@@ -6,114 +6,507 @@
     <title>Abrir WhatsApp</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
-    <meta name="theme-color" content="#25D366">
+    <meta name="theme-color" content="#00A884">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Define a fonte Inter para todo o corpo */
+        :root {
+            --md-sys-color-primary: #00A884;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #E8F5E8;
+            --md-sys-color-on-primary-container: #002114;
+            --md-sys-color-surface: #FEFBFF;
+            --md-sys-color-on-surface: #1C1B1F;
+            --md-sys-color-surface-variant: #F4EFF4;
+            --md-sys-color-on-surface-variant: #49454F;
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-outline-variant: #CAC4D0;
+            --md-sys-color-error: #BA1A1A;
+            --md-sys-color-on-error: #FFFFFF;
+            --md-sys-color-error-container: #FFDAD6;
+            --md-sys-color-on-error-container: #410002;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5; /* Cor de fundo suave */
+            background: linear-gradient(135deg, #E8F5E8 0%, #F0F2F5 100%);
+            min-height: 100vh;
+            margin: 0;
             display: flex;
-            justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Garante que o corpo ocupe a altura total da viewport */
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .container {
+            background: var(--md-sys-color-surface);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.12);
+            width: 100%;
+            max-width: 480px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .container:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.16);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header-icon {
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 40px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--md-sys-color-on-surface);
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--md-sys-color-on-surface-variant);
             margin: 0;
         }
-        /* Estilos adicionais para centralizar e dar um visual agradável */
-        .card-container {
-            background-color: white;
-            padding: 2.5rem; /* Padding maior para mobile */
-            border-radius: 1.5rem; /* Cantos mais arredondados */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
-            text-align: center;
-            max-width: 90%; /* Largura máxima para mobile */
-            width: 400px; /* Largura fixa para desktop */
+
+        .input-group {
+            margin-bottom: 24px;
         }
-        @media (min-width: 640px) { /* Ajustes para telas maiores */
-            .card-container {
-                padding: 3rem;
+
+        .input-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 8px;
+        }
+
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: var(--md-sys-color-surface-variant);
+            border-radius: 16px;
+            border: 2px solid var(--md-sys-color-outline-variant);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-container:focus-within {
+            border-color: var(--md-sys-color-primary);
+            background: var(--md-sys-color-surface);
+            box-shadow: 0 0 0 4px rgba(0, 168, 132, 0.12);
+        }
+
+        .country-code {
+            padding: 16px 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface-variant);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            min-width: 80px;
+            text-align: center;
+            border-right: 1px solid var(--md-sys-color-outline-variant);
+        }
+
+        .country-code:focus {
+            outline: none;
+        }
+
+        .phone-input {
+            flex: 1;
+            padding: 16px;
+            font-size: 16px;
+            color: var(--md-sys-color-on-surface);
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .phone-input::placeholder {
+            color: var(--md-sys-color-outline);
+        }
+
+        .input-help {
+            font-size: 14px;
+            color: var(--md-sys-color-on-surface-variant);
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            border: none;
+            border-radius: 20px;
+            padding: 16px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 4px 12px rgba(0, 168, 132, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .btn-primary:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .message-box {
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .message-box.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .message-box.error {
+            background: var(--md-sys-color-error-container);
+            color: var(--md-sys-color-on-error-container);
+        }
+
+        .message-box.success {
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+        }
+
+        .loading {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 24px;
+                margin: 8px;
+            }
+
+            .title {
+                font-size: 28px;
+            }
+
+            .header-icon {
+                width: 64px;
+                height: 64px;
+                font-size: 32px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="card-container">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Abrir WhatsApp</h1>
+    <div class="container">
+        <div class="header">
+            <div class="header-icon">
+                <span class="material-icons">chat</span>
+            </div>
+            <h1 class="title">Abrir WhatsApp</h1>
+            <p class="subtitle">Conecte-se rapidamente com seus contatos</p>
+        </div>
 
-        <div class="mb-6">
-            <label for="phoneNumber" class="block text-gray-700 text-lg font-semibold mb-2">
-                Número de Telefone:
+        <div class="input-group">
+            <label for="phoneNumber" class="input-label">
+                Número de Telefone
             </label>
-            <input
-                type="tel"
-                id="phoneNumber"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900 text-lg"
-                placeholder="Ex: 5511987654321"
-                aria-label="Número de Telefone"
-            />
-            <p class="text-sm text-gray-500 mt-2">
-                Inclua o código do país e o DDD (sem espaços ou caracteres especiais).
-                <br>Ex: 55 (Brasil) 11 (São Paulo) 9876543210 (Número)
+            <div class="input-container">
+                <select class="country-code" id="countryCode">
+                    <option value="+55">🇧🇷 +55</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+44">🇬🇧 +44</option>
+                    <option value="+49">🇩🇪 +49</option>
+                    <option value="+33">🇫🇷 +33</option>
+                    <option value="+39">🇮🇹 +39</option>
+                    <option value="+34">🇪🇸 +34</option>
+                    <option value="+351">🇵🇹 +351</option>
+                    <option value="+54">🇦🇷 +54</option>
+                    <option value="+52">🇲🇽 +52</option>
+                </select>
+                <input
+                    type="tel"
+                    id="phoneNumber"
+                    class="phone-input"
+                    placeholder="11987654321"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                    aria-label="Número de Telefone"
+                    autocomplete="tel"
+                />
+            </div>
+            <p class="input-help">
+                Digite o DDD + número (ex: 11987654321 para São Paulo)
             </p>
         </div>
 
-        <button
-            id="openWhatsappBtn"
-            class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 text-xl"
-        >
-            Abrir no WhatsApp
+        <button id="openWhatsappBtn" class="btn-primary">
+            <span class="material-icons"></span>
+            <span id="btnText">Abrir no WhatsApp</span>
+            <div class="loading" id="loading"></div>
         </button>
 
-        <div id="messageBox" class="mt-6 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden" role="alert">
-            </div>
+        <div id="messageBox" class="message-box">
+            <span class="material-icons" id="messageIcon"></span>
+            <span id="messageText"></span>
+        </div>
     </div>
 
     <script>
-        // Obtém referências para os elementos HTML
+        // Detecta o país do usuário e define o DDI apropriado
+        function detectCountry() {
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const countryCode = document.getElementById('countryCode');
+            
+            // Mapeamento básico de timezone para país
+            const timezoneToCountry = {
+                'America/Sao_Paulo': '+55',
+                'America/New_York': '+1',
+                'America/Los_Angeles': '+1',
+                'Europe/London': '+44',
+                'Europe/Berlin': '+49',
+                'Europe/Paris': '+33',
+                'Europe/Rome': '+39',
+                'Europe/Madrid': '+34',
+                'Europe/Lisbon': '+351',
+                'America/Argentina/Buenos_Aires': '+54',
+                'America/Mexico_City': '+52'
+            };
+
+            const detectedCountry = timezoneToCountry[timezone] || '+55';
+            countryCode.value = detectedCountry;
+        }
+
+        // Elementos DOM
         const phoneNumberInput = document.getElementById('phoneNumber');
+        const countryCodeSelect = document.getElementById('countryCode');
         const openWhatsappBtn = document.getElementById('openWhatsappBtn');
         const messageBox = document.getElementById('messageBox');
+        const messageIcon = document.getElementById('messageIcon');
+        const messageText = document.getElementById('messageText');
+        const btnText = document.getElementById('btnText');
+        const loading = document.getElementById('loading');
 
-        // Função para exibir mensagens na caixa de mensagem
+        // Inicialização
+        detectCountry();
+
+        // Função para exibir mensagens
         function showMessage(message, type = 'error') {
-            messageBox.textContent = message;
-            messageBox.className = `mt-6 p-4 rounded-lg ${type === 'error' ? 'bg-red-100 text-red-700 border border-red-300' : 'bg-green-100 text-green-700 border border-green-300'} block`;
+            messageText.textContent = message;
+            messageIcon.textContent = type === 'error' ? 'error' : 'check_circle';
+            messageBox.className = `message-box ${type} show`;
+            
+            // Auto-hide após 5 segundos
+            setTimeout(() => {
+                hideMessage();
+            }, 5000);
         }
 
-        // Função para ocultar a caixa de mensagem
-        function hideMessageBox() {
-            messageBox.classList.add('hidden');
+        // Função para ocultar mensagens
+        function hideMessage() {
+            messageBox.classList.remove('show');
         }
 
-        // Adiciona um ouvinte de evento de clique ao botão
-        openWhatsappBtn.addEventListener('click', () => {
-            hideMessageBox(); // Oculta qualquer mensagem anterior
+        // Função para mostrar loading
+        function showLoading() {
+            btnText.style.display = 'none';
+            loading.style.display = 'block';
+            openWhatsappBtn.disabled = true;
+        }
 
-            const phoneNumber = phoneNumberInput.value.trim(); // Obtém o número e remove espaços em branco
+        // Função para esconder loading
+        function hideLoading() {
+            btnText.style.display = 'block';
+            loading.style.display = 'none';
+            openWhatsappBtn.disabled = false;
+        }
 
-            // Validação básica do número de telefone
-            if (!phoneNumber) {
-                showMessage('Por favor, digite um número de telefone.');
-                return;
+        // Formatação do número durante a digitação
+        phoneNumberInput.addEventListener('input', (e) => {
+            hideMessage();
+            
+            // Remove caracteres não numéricos
+            let value = e.target.value.replace(/\D/g, '');
+            
+            // Limita o tamanho baseado no país
+            const maxLength = countryCodeSelect.value === '+55' ? 11 : 15;
+            if (value.length > maxLength) {
+                value = value.slice(0, maxLength);
             }
-
-            // Remove caracteres não numéricos do número de telefone
-            const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
-
-            if (cleanedPhoneNumber.length < 10) { // Um número de telefone válido geralmente tem pelo menos 10 dígitos (país + ddd + número)
-                showMessage('Número de telefone inválido. Por favor, inclua o código do país e o DDD.');
-                return;
-            }
-
-            // Constrói a URL do WhatsApp
-            const whatsappUrl = `https://wa.me/${cleanedPhoneNumber}`;
-
-            // Abre a URL em uma nova aba
-            window.open(whatsappUrl, '_blank');
+            
+            e.target.value = value;
         });
 
-        // Opcional: Limpa a mensagem de erro quando o usuário começa a digitar novamente
-        phoneNumberInput.addEventListener('input', hideMessageBox);
+        // Validação em tempo real
+        phoneNumberInput.addEventListener('blur', () => {
+            const phoneNumber = phoneNumberInput.value.trim();
+            const countryCode = countryCodeSelect.value;
+            
+            if (phoneNumber && !isValidPhoneNumber(phoneNumber, countryCode)) {
+                showMessage('Número de telefone inválido para o país selecionado.', 'error');
+            }
+        });
+
+        // Função de validação
+        function isValidPhoneNumber(number, countryCode) {
+            const cleanNumber = number.replace(/\D/g, '');
+            
+            switch (countryCode) {
+                case '+55': // Brasil
+                    return cleanNumber.length === 11 && cleanNumber.startsWith('1');
+                case '+1': // EUA/Canadá
+                    return cleanNumber.length === 10;
+                case '+44': // Reino Unido
+                    return cleanNumber.length >= 10 && cleanNumber.length <= 11;
+                default:
+                    return cleanNumber.length >= 8 && cleanNumber.length <= 15;
+            }
+        }
+
+        // Evento principal do botão
+        openWhatsappBtn.addEventListener('click', async () => {
+            hideMessage();
+            
+            const phoneNumber = phoneNumberInput.value.trim();
+            const countryCode = countryCodeSelect.value;
+            
+            // Validações
+            if (!phoneNumber) {
+                showMessage('Por favor, digite um número de telefone.', 'error');
+                phoneNumberInput.focus();
+                return;
+            }
+
+            if (!isValidPhoneNumber(phoneNumber, countryCode)) {
+                showMessage('Número de telefone inválido. Verifique o formato.', 'error');
+                phoneNumberInput.focus();
+                return;
+            }
+
+            // Mostra loading
+            showLoading();
+
+            try {
+                // Simula um pequeno delay para melhor UX
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                // Constrói a URL do WhatsApp
+                const cleanNumber = phoneNumber.replace(/\D/g, '');
+                const fullNumber = countryCode.replace('+', '') + cleanNumber;
+                const whatsappUrl = `https://wa.me/${fullNumber}`;
+
+                // Abre no WhatsApp
+                window.open(whatsappUrl, '_blank');
+                
+                showMessage('Redirecionando para o WhatsApp...', 'success');
+                
+            } catch (error) {
+                showMessage('Erro ao abrir o WhatsApp. Tente novamente.', 'error');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Permite enviar com Enter
+        phoneNumberInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                openWhatsappBtn.click();
+            }
+        });
+
+        // Limpa mensagens quando o usuário muda o código do país
+        countryCodeSelect.addEventListener('change', () => {
+            hideMessage();
+            phoneNumberInput.focus();
+        });
+
+        // Adiciona vibração no mobile (se disponível)
+        function vibrate() {
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        // Adiciona feedback tátil aos botões
+        openWhatsappBtn.addEventListener('click', vibrate);
+        countryCodeSelect.addEventListener('change', vibrate);
     </script>
 </body>
 </html>
