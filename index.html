@@ -217,7 +217,12 @@
     <!-- <button id="openBusinessBtn" class="btn-primary">
       Abrir WhatsApp Business
     </button> -->
-    <p> <h6> @version 1.26</h6></p>
+
+    <!-- version.js -->
+    <!-- <p> <h6> arquivo/version.js </h6></p> -->  
+    <p class="input-help">
+      <small>Versão: <span id="version"></span></small>
+    </p>
 
 
     <div id="messageBox" class="message-box"><span id="messageIcon" class="material-icons"></span><span id="messageText"></span></div>
@@ -236,5 +241,16 @@
       });
     }
   </script>
+  <script>
+  fetch('version.js')
+    .then(res => res.text())
+    .then(version => {
+      document.getElementById('version').textContent = version.trim();
+    })
+    .catch(err => {
+      console.error('Erro ao carregar versão:', err);
+    });
+</script>
+
 </body>
 </html>

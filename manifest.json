@@ -1,6 +1,6 @@
 {
   "name": "Abrir WhatsApp",
-  "short_name": "Wame",
+  "short_name": "Abrir WhatsApp",
   "start_url": "/Wame/",
   "scope": "/Wame/",
   "display": "standalone",
