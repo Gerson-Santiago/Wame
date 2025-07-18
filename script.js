@@ -41,27 +41,34 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!fullNumber) return;
 
     let appUrl;
+    let fallbackUrl = `https://wa.me/${fullNumber}`;
 
     if (type === 'consumer') {
       appUrl = `whatsapp://send?phone=${fullNumber}`;
     } else if (type === 'business') {
-      // WhatsApp Business app nem sempre aceita whatsapp-business://
-      // Usar whatsapp:// com parâmetro business
-      appUrl = `whatsapp://send?phone=${fullNumber}&app=business`;
+      // Abrir direto o link web, que abre app Business se disponível
+      appUrl = fallbackUrl;
+      fallbackUrl = null; // Sem fallback extra
     } else {
       showMessage('error', 'Tipo inválido para WhatsApp.');
       return;
     }
 
-    // Tenta abrir app WhatsApp
-    window.location.assign(appUrl);
-
-    // Após 1 segundo abre fallback no WhatsApp Web
-    setTimeout(() => {
-      window.open(`https://wa.me/${fullNumber}`, '_blank');
-      showMessage('success', `Tentando abrir no WhatsApp ${type === 'consumer' ? 'pessoal' : 'Business'}...`);
-    }, 1000);
+    // Se appUrl e fallbackUrl forem iguais, só abre uma vez
+    if (appUrl === fallbackUrl || !fallbackUrl) {
+      window.location.assign(appUrl);
+      showMessage('success', `Tentando abrir WhatsApp ${type === 'consumer' ? 'pessoal' : 'Business'}...`);
+    } else {
+      // Tenta abrir app e depois fallback na web
+      window.location.assign(appUrl);
+      setTimeout(() => {
+        window.open(fallbackUrl, '_blank');
+        showMessage('success', `Tentando abrir WhatsApp ${type === 'consumer' ? 'pessoal' : 'Business'}...`);
+      }, 1000);
+    }
   }
+
+
 
   // Eventos dos botões
   btnConsumer.addEventListener('click', () => openWhatsapp('consumer'));
