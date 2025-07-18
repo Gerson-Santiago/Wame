@@ -5,7 +5,8 @@
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "live-server --port=8080 --open=./index.html"
+    "start": "live-server --port=8080 --open=./index.html",
+    "dev": "npm run start"
   },
   "repository": {
     "type": "git",
