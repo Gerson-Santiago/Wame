@@ -181,8 +181,13 @@
       <label for="phoneNumber" class="input-label">Número de Telefone</label>
       <div class="input-container">
         <select id="countryCode" class="country-code">
+          <!-- Códigos de país -->
           <option value="+55">🇧🇷 +55</option>
+          <!-- colocar uma linha para dar destaque ao brasil -->
+          <option value="" disabled>─────────────────</option>
           <option value="+1">🇺🇸 +1</option>
+          <option value="+61">🇦🇺 +61</option>
+          <option value="+91">🇮🇳 +91</option>
           <option value="+44">🇬🇧 +44</option>
           <option value="+49">🇩🇪 +49</option>
           <option value="+33">🇫🇷 +33</option>
@@ -191,6 +196,10 @@
           <option value="+351">🇵🇹 +351</option>
           <option value="+54">🇦🇷 +54</option>
           <option value="+52">🇲🇽 +52</option>
+          <option value="+57">🇨🇴 +57</option>
+          <option value="+56">🇨🇱 +56</option>
+          <option value="+598">🇺🇾 +598</option>
+
           <!-- outros códigos -->
         </select>
         <input id="phoneNumber" class="phone-input" type="tel" placeholder="11987654321" autocomplete="tel" pattern="[0-9]*" inputmode="numeric" />
