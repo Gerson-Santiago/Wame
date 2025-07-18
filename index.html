@@ -14,7 +14,6 @@
   <link rel="icon" sizes="192x192" href="/Wame/android-chrome-192.png" />
   <link rel="icon" sizes="512x512" href="/Wame/android-chrome-512.png" />
 
-
   <!-- Fonts & Icons -->
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
@@ -45,6 +44,10 @@
       --md-sys-color-on-error: #ffffff;
       --md-sys-color-error-container: #ffdad6;
       --md-sys-color-on-error-container: #410002;
+      --md-sys-color-business: #075e54;
+      --md-sys-color-on-business: #ffffff;
+      --md-sys-color-business-container: #e8f5e8;
+      --md-sys-color-on-business-container: #002114;
     }
     * {
       box-sizing: border-box;
@@ -121,7 +124,7 @@
     .phone-input::placeholder { color: var(--md-sys-color-outline); }
     .input-help { font-size: 14px; color: var(--md-sys-color-on-surface-variant); margin-top: 8px; }
     .btn-primary {
-      width: 100%; padding: 16px;
+      width: 100%; padding: 16px; margin-bottom: 12px;
       font-size: 18px; font-weight: 600;
       background: var(--md-sys-color-primary);
       color: var(--md-sys-color-on-primary);
@@ -143,6 +146,46 @@
       transition: width 0.3s, height 0.3s;
     }
     .btn-primary:active::before { width:300px; height:300px; }
+    .btn-business {
+      width: 100%; padding: 16px; margin-bottom: 12px;
+      font-size: 18px; font-weight: 600;
+      background: var(--md-sys-color-business);
+      color: var(--md-sys-color-on-business);
+      border: none; border-radius: 20px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      position: relative; overflow: hidden;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .btn-business:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(7,94,84,0.3); }
+    .btn-business:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-business::before {
+      content: '';
+      position: absolute; top:50%; left:50%;
+      width:0; height:0;
+      background: rgba(255,255,255,0.2);
+      border-radius:50%;
+      transform:translate(-50%,-50%);
+      transition: width 0.3s, height 0.3s;
+    }
+    .btn-business:active::before { width:300px; height:300px; }
+    .app-info {
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--md-sys-color-primary-container);
+      border-radius: 12px;
+      font-size: 14px;
+      color: var(--md-sys-color-on-primary-container);
+      text-align: center;
+    }
+    .app-info h4 {
+      margin: 0 0 8px;
+      font-weight: 600;
+    }
+    .app-info p {
+      margin: 0;
+      line-height: 1.4;
+    }
     .message-box {
       margin-top:24px; padding:16px;
       border-radius:12px;
@@ -200,36 +243,149 @@
           <option value="+57">🇨🇴 +57</option>
           <option value="+56">🇨🇱 +56</option>
           <option value="+598">🇺🇾 +598</option>
-
-          <!-- outros códigos -->
         </select>
         <input id="phoneNumber" class="phone-input" type="tel" placeholder="11987654321" autocomplete="tel" pattern="[0-9]*" inputmode="numeric" />
       </div>
       <p class="input-help">Digite o DDD + número (ex: 11987654321 para São Paulo)</p>
     </div>
 
-    <!-- <p class="input-help mt-4">
-      Se tiver WhatsApp e WhatsApp Business, pode optar por um dos botões:
-    </p> -->
-    <button id="openConsumerBtn" class="btn-primary mb-2">
+    <button id="openConsumerBtn" class="btn-primary">
+      <span class="material-icons">message</span>
       Abrir WhatsApp
     </button>
-    <!-- <button id="openBusinessBtn" class="btn-primary">
-      Abrir WhatsApp Business
-    </button> -->
 
-    <!-- version.js -->
-    <!-- <p> <h6> arquivo/version.js </h6></p> -->  
+    <button id="openBusinessBtn" class="btn-business">
+      <span class="material-icons">business</span>
+      Abrir WhatsApp Business
+    </button>
+
+    <div class="app-info">
+      <h4>💡 Dica para Android</h4>
+      <p>No Android, escolha entre WhatsApp pessoal ou Business. Se você tem apenas um instalado, o sistema abrirá automaticamente o disponível.</p>
+    </div>
+
     <p class="input-help">
       <small>Versão: <span id="version"></span></small>
     </p>
 
-
-    <div id="messageBox" class="message-box"><span id="messageIcon" class="material-icons"></span><span id="messageText"></span></div>
+    <div id="messageBox" class="message-box">
+      <span id="messageIcon" class="material-icons"></span>
+      <span id="messageText"></span>
+    </div>
   </div>
 
   <!-- Script principal -->
-  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const phoneInput = document.getElementById('phoneNumber');
+      const countryCode = document.getElementById('countryCode');
+      const btnConsumer = document.getElementById('openConsumerBtn');
+      const btnBusiness = document.getElementById('openBusinessBtn');
+      const messageBox = document.getElementById('messageBox');
+      const messageIcon = document.getElementById('messageIcon');
+      const messageText = document.getElementById('messageText');
+
+      // Mostra mensagem ao usuário
+      function showMessage(type, text) {
+        messageBox.className = `message-box show ${type}`;
+        messageIcon.textContent = type === 'error' ? 'error' : 'check_circle';
+        messageText.textContent = text;
+        clearTimeout(messageBox.dataset.timeoutId);
+        messageBox.dataset.timeoutId = setTimeout(() => {
+          messageBox.classList.remove('show');
+        }, 4000);
+      }
+
+      // Obtém número completo (código + telefone) sanitizado
+      function getFullNumber() {
+        const code = countryCode.value.trim();
+        const num = phoneInput.value.trim().replace(/\D/g, '');
+        if (!num) {
+          showMessage('error', 'Digite um número de telefone válido.');
+          return null;
+        }
+        return `${code}${num}`;
+      }
+
+      // Abre WhatsApp Consumer (pessoal)
+      function openWhatsappConsumer() {
+        const fullNumber = getFullNumber();
+        if (!fullNumber) return;
+        
+        // Tenta abrir diretamente no app WhatsApp
+        const androidIntent = `intent://send?phone=${fullNumber.replace('+', '')}#Intent;scheme=whatsapp;package=com.whatsapp;end`;
+        
+        // Fallback para wa.me
+        const waUrl = `https://wa.me/${fullNumber}`;
+        
+        // Detecta se é Android
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        
+        if (isAndroid) {
+          // Tenta abrir o intent do Android primeiro
+          window.location.href = androidIntent;
+          // Fallback após um pequeno delay
+          setTimeout(() => {
+            window.open(waUrl, '_blank');
+          }, 1000);
+          showMessage('success', 'Abrindo WhatsApp pessoal...');
+        } else {
+          // Para iOS/Web, usa wa.me
+          window.open(waUrl, '_blank');
+          showMessage('success', 'Abrindo WhatsApp...');
+        }
+      }
+
+      // Abre WhatsApp Business
+      function openWhatsappBusiness() {
+        const fullNumber = getFullNumber();
+        if (!fullNumber) return;
+        
+        // Intent específico para WhatsApp Business no Android
+        const androidIntent = `intent://send?phone=${fullNumber.replace('+', '')}#Intent;scheme=whatsapp;package=com.whatsapp.w4b;end`;
+        
+        // Fallback para wa.me
+        const waUrl = `https://wa.me/${fullNumber}`;
+        
+        // Detecta se é Android
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        
+        if (isAndroid) {
+          // Tenta abrir o intent do WhatsApp Business primeiro
+          window.location.href = androidIntent;
+          // Fallback após um pequeno delay
+          setTimeout(() => {
+            window.open(waUrl, '_blank');
+          }, 1000);
+          showMessage('success', 'Abrindo WhatsApp Business...');
+        } else {
+          // Para iOS/Web, usa wa.me (não há diferenciação)
+          window.open(waUrl, '_blank');
+          showMessage('success', 'Abrindo WhatsApp Business...');
+        }
+      }
+
+      // Eventos para os botões
+      btnConsumer.addEventListener('click', openWhatsappConsumer);
+      btnBusiness.addEventListener('click', openWhatsappBusiness);
+
+      // Opcional: enviar ao pressionar Enter no input (abre WhatsApp padrão)
+      phoneInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') openWhatsappConsumer();
+      });
+
+      // Carrega versão
+      fetch('version.js')
+        .then(res => res.text())
+        .then(version => {
+          document.getElementById('version').textContent = version.trim();
+        })
+        .catch(err => {
+          console.error('Erro ao carregar versão:', err);
+          document.getElementById('version').textContent = '1.0.0';
+        });
+    });
+  </script>
 
   <!-- Register Service Worker -->
   <script>
@@ -241,16 +397,5 @@
       });
     }
   </script>
-  <script>
-  fetch('version.js')
-    .then(res => res.text())
-    .then(version => {
-      document.getElementById('version').textContent = version.trim();
-    })
-    .catch(err => {
-      console.error('Erro ao carregar versão:', err);
-    });
-</script>
-
 </body>
 </html>
