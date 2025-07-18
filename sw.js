@@ -7,7 +7,3 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   console.log('Service Worker ativado');
 });
-
-// self.addEventListener('fetch', event => {
-//   // você pode aqui fazer cache dinâmico, mas não é obrigatório para o prompt
-// });

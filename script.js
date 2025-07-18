@@ -1,61 +1,64 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const btnMain = document.getElementById('openWhatsappBtn');
-  const btnConsumer = document.getElementById('openConsumerBtn');
-  const btnBusiness = document.getElementById('openBusinessBtn');
-  const countryCode = document.getElementById('countryCode');
   const phoneInput = document.getElementById('phoneNumber');
+  const countryCode = document.getElementById('countryCode');
+
+  const buttons = {
+    consumer: document.getElementById('openConsumerBtn'),
+    business: document.getElementById('openBusinessBtn'),
+  };
+
   const messageBox = document.getElementById('messageBox');
   const messageIcon = document.getElementById('messageIcon');
   const messageText = document.getElementById('messageText');
-  const loading = document.getElementById('loading');
 
-  function showMessage(type, text) {
+  // --- Funções utilitárias ---
+
+  const showMessage = (type, text) => {
     messageBox.className = `message-box show ${type}`;
-    messageIcon.textContent = (type === 'error') ? 'error' : 'check_circle';
+    messageIcon.textContent = type === 'error' ? 'error' : 'check_circle';
     messageText.textContent = text;
-    setTimeout(() => messageBox.classList.remove('show'), 3000);
-  }
+    clearTimeout(messageBox.dataset.timeoutId);
+    messageBox.dataset.timeoutId = setTimeout(() => {
+      messageBox.classList.remove('show');
+    }, 3000);
+  };
 
-  function getFullNumber() {
+  const getFullNumber = () => {
     const code = countryCode.value;
-    const num = phoneInput.value.trim();
-    if (!num) { showMessage('error', 'Digite um número de telefone.'); return null; }
-    return code + num;
-  }
+    const num = phoneInput.value.replace(/\D/g, '');
 
-  btnMain.addEventListener('click', () => {
-    const full = getFullNumber(); if (!full) return;
-    loading.style.display = 'inline-block'; btnMain.disabled = true;
-
-    if (/Android/i.test(navigator.userAgent)) {
-      window.location.href = `intent://send/?phone=${full}#Intent;scheme=smsto;end`;
-    } else {
-      window.location.href = `whatsapp://send?phone=${full}`;
+    if (!num) {
+      showMessage('error', 'Digite um número de telefone.');
+      return null;
     }
 
-    setTimeout(() => {
-      window.open(`https://wa.me/${full}`, '_blank');
-      loading.style.display = 'none'; btnMain.disabled = false;
-      showMessage('success', 'Abrindo no WhatsApp Web…');
-    }, 1000);
-  });
+    return `${code}${num}`;
+  };
 
-  btnConsumer.addEventListener('click', () => {
-    const full = getFullNumber(); if (!full) return;
-    window.location.href = `whatsapp://send?phone=${full}`;
+  const openWhatsappLink = (type = 'consumer') => {
+    const fullNumber = getFullNumber();
+    if (!fullNumber) return;
+
+    let protocol = 'whatsapp';
+    if (type === 'business') protocol = 'whatsapp-business';
+
+    // Tenta abrir no app
+    window.location.href = `${protocol}://send?phone=${fullNumber}`;
+
+    // Fallback: WhatsApp Web
     setTimeout(() => {
-      window.open(`https://wa.me/${full}`, '_blank');
-      showMessage('success', 'Tentando abrir no WhatsApp pessoal…');
+      window.open(`https://wa.me/${fullNumber}`, '_blank');
+      showMessage('success', `Tentando abrir no WhatsApp ${type === 'business' ? 'Business' : 'pessoal'}…`);
     }, 800);
-  });
+  };
 
-  btnBusiness.addEventListener('click', () => {
-    const full = getFullNumber(); if (!full) return;
-    window.location.href = `whatsapp-business://send?phone=${full}`;
-    setTimeout(() => {
-      window.open(`https://wa.me/${full}`, '_blank');
-      showMessage('success', 'Tentando abrir no WhatsApp Business…');
-    }, 800);
-  });
+  // --- Eventos ---
 
+  buttons.consumer.addEventListener('click', () => openWhatsappLink('consumer'));
+  buttons.business.addEventListener('click', () => openWhatsappLink('business'));
+
+  // Opcional: Enter no input envia
+  phoneInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') openWhatsappLink('consumer');
+  });
 });
