@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Gerson-Santiago/Wame/issues"
   },
-  "homepage": "https://github.com/Gerson-Santiago/Wame#readme"
+  "homepage": "https://github.com/Gerson-Santiago/Wame#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
 }
