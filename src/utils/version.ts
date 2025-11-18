@@ -3,4 +3,4 @@
  * Constante que armazena a versão atual da aplicação.
  * Usada para ser exibida na UI.
  */
-export const versionAPP = '2.01.5';
+export const versionAPP = '3.0.0';

@@ -1,11 +1,11 @@
 /// <reference lib="webworker" />
 
-// ~/Wame/sw.ts
-self.addEventListener('install', (event: any) => { // Dica: adicione :any por via das dúvidas
+// Service Worker básico
+// Instalando o Service Worker
+self.addEventListener('install', (event: any) => {
   console.log('Service Worker instalado');
-  self.skipWaiting(); 
+  self.skipWaiting();
 });
-
-self.addEventListener('activate', (event: any) => { // Dica: adicione :any por via das dúvidas
+self.addEventListener('activate', (event: any) => {
   console.log('Service Worker ativado');
 });
