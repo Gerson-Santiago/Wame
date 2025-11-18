@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Abrir WhatsApp</title>
 
-  <!-- PWA Manifest -->
+  <!-- PWA Manifest (Caminho corrigido para a pasta public) -->
   <link rel="manifest" href="/Wame/manifest.json" />
   <meta name="theme-color" content="#00A884" />
 
-  <!-- Favicons & App Icons -->
+  <!-- Favicons & App Icons (Caminho corrigido para a pasta public) -->
   <link rel="icon" type="image/png" href="/Wame/favicon.png" />
   <link rel="icon" sizes="192x192" href="/Wame/android-chrome-192.png" />
   <link rel="icon" sizes="512x512" href="/Wame/android-chrome-512.png" />
 
   <!-- Fonts & Icons -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
-  <link
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
   <!-- TailwindCSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Custom Styles -->
+  <!-- Custom Styles (CSS Completo) -->
   <style>
     :root {
       --md-sys-color-primary: #00A884;
@@ -49,9 +44,11 @@
       --md-sys-color-business-container: #e8f5e8;
       --md-sys-color-on-business-container: #002114;
     }
+
     * {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -62,113 +59,227 @@
       justify-content: center;
       padding: 16px;
     }
+
     .container {
       background: var(--md-sys-color-surface);
       border-radius: 28px;
       padding: 32px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.12);
       max-width: 480px;
       width: 100%;
       transition: box-shadow 0.3s;
     }
+
     .container:hover {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.16);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.16);
     }
-    .header { text-align: center; margin-bottom: 32px; }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
     .header-icon {
       background: var(--md-sys-color-primary-container);
       color: var(--md-sys-color-on-primary-container);
-      width: 80px; height: 80px;
+      width: 80px;
+      height: 80px;
       border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin: 0 auto 16px;
       font-size: 40px;
       animation: pulse 2s infinite;
     }
+
     @keyframes pulse {
-      0%,100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
     }
-    .title { font-size: 32px; font-weight: 600; color: var(--md-sys-color-on-surface); margin: 0 0 8px; }
-    .subtitle { font-size: 16px; color: var(--md-sys-color-on-surface-variant); margin: 0; }
-    .input-group { margin-bottom: 24px; }
-    .input-label { display: block; font-size: 16px; font-weight: 500; color: var(--md-sys-color-on-surface); margin-bottom: 8px; }
+
+    .title {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface);
+      margin: 0 0 8px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--md-sys-color-on-surface-variant);
+      margin: 0;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 8px;
+    }
+
     .input-container {
-      display: flex; align-items: center;
+      display: flex;
+      align-items: center;
       background: var(--md-sys-color-surface-variant);
       border: 2px solid var(--md-sys-color-outline-variant);
       border-radius: 16px;
       transition: all 0.3s;
     }
+
     .input-container:focus-within {
       border-color: var(--md-sys-color-primary);
       background: var(--md-sys-color-surface);
-      box-shadow: 0 0 0 4px rgba(0,168,132,0.12);
+      box-shadow: 0 0 0 4px rgba(0, 168, 132, 0.12);
     }
+
     .country-code {
       padding: 16px 12px;
-      font-size: 16px; font-weight: 500;
+      font-size: 16px;
+      font-weight: 500;
       color: var(--md-sys-color-on-surface-variant);
-      border: none; background: transparent;
-      min-width: 80px; text-align: center;
+      border: none;
+      background: transparent;
+      min-width: 80px;
+      text-align: center;
       border-right: 1px solid var(--md-sys-color-outline-variant);
       cursor: pointer;
     }
-    .country-code:focus { outline: none; }
-    .phone-input {
-      flex: 1; padding: 16px;
-      font-size: 16px; color: var(--md-sys-color-on-surface);
-      border: none; background: transparent;
+
+    .country-code:focus {
       outline: none;
     }
-    .phone-input::placeholder { color: var(--md-sys-color-outline); }
-    .input-help { font-size: 14px; color: var(--md-sys-color-on-surface-variant); margin-top: 8px; }
+
+    .phone-input {
+      flex: 1;
+      padding: 16px;
+      font-size: 16px;
+      color: var(--md-sys-color-on-surface);
+      border: none;
+      background: transparent;
+      outline: none;
+    }
+
+    .phone-input::placeholder {
+      color: var(--md-sys-color-outline);
+    }
+
+    .input-help {
+      font-size: 14px;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-top: 8px;
+    }
+
     .btn-primary {
-      width: 100%; padding: 16px; margin-bottom: 12px;
-      font-size: 18px; font-weight: 600;
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 12px;
+      font-size: 18px;
+      font-weight: 600;
       background: var(--md-sys-color-primary);
       color: var(--md-sys-color-on-primary);
-      border: none; border-radius: 20px;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      position: relative; overflow: hidden;
+      border: none;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
       transition: all 0.3s;
       cursor: pointer;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,168,132,0.3); }
-    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 168, 132, 0.3);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .btn-primary::before {
       content: '';
-      position: absolute; top:50%; left:50%;
-      width:0; height:0;
-      background: rgba(255,255,255,0.2);
-      border-radius:50%;
-      transform:translate(-50%,-50%);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
       transition: width 0.3s, height 0.3s;
     }
-    .btn-primary:active::before { width:300px; height:300px; }
+
+    .btn-primary:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
     .btn-business {
-      width: 100%; padding: 16px; margin-bottom: 12px;
-      font-size: 18px; font-weight: 600;
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 12px;
+      font-size: 18px;
+      font-weight: 600;
       background: var(--md-sys-color-business);
       color: var(--md-sys-color-on-business);
-      border: none; border-radius: 20px;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      position: relative; overflow: hidden;
+      border: none;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
       transition: all 0.3s;
       cursor: pointer;
     }
-    .btn-business:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(7,94,84,0.3); }
-    .btn-business:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-business:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(7, 94, 84, 0.3);
+    }
+
+    .btn-business:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .btn-business::before {
       content: '';
-      position: absolute; top:50%; left:50%;
-      width:0; height:0;
-      background: rgba(255,255,255,0.2);
-      border-radius:50%;
-      transform:translate(-50%,-50%);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
       transition: width 0.3s, height 0.3s;
     }
-    .btn-business:active::before { width:300px; height:300px; }
+
+    .btn-business:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
     .app-info {
       margin-top: 16px;
       padding: 16px;
@@ -178,41 +289,87 @@
       color: var(--md-sys-color-on-primary-container);
       text-align: center;
     }
+
     .app-info h4 {
       margin: 0 0 8px;
       font-weight: 600;
     }
+
     .app-info p {
       margin: 0;
       line-height: 1.4;
     }
+
     .message-box {
-      margin-top:24px; padding:16px;
-      border-radius:12px;
-      display:flex; align-items:center; gap:8px;
-      font-size:14px;
-      transform: translateY(-10px); opacity:0;
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      transform: translateY(-10px);
+      opacity: 0;
       transition: all 0.3s;
     }
-    .message-box.show { transform: translateY(0); opacity:1; }
-    .message-box.error { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
-    .message-box.success { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
-    .loading {
-      display:none; width:20px; height:20px;
-      border:2px solid transparent;
-      border-top:2px solid currentColor;
-      border-radius:50%; animation: spin 1s linear infinite;
+
+    .message-box.show {
+      transform: translateY(0);
+      opacity: 1;
     }
-    @keyframes spin { 0%{transform:rotate(0deg);}100%{transform:rotate(360deg);} }
+
+    .message-box.error {
+      background: var(--md-sys-color-error-container);
+      color: var(--md-sys-color-on-error-container);
+    }
+
+    .message-box.success {
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+    }
+
+    .loading {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
     @media (max-width:640px) {
-      .container { padding:24px; margin:8px; }
-      .title { font-size:28px; }
-      .header-icon { width:64px; height:64px; font-size:32px; }
+      .container {
+        padding: 24px;
+        margin: 8px;
+      }
+
+      .title {
+        font-size: 28px;
+      }
+
+      .header-icon {
+        width: 64px;
+        height: 64px;
+        font-size: 32px;
+      }
     }
   </style>
-  <script type="module" crossorigin src="/wame/assets/index-BAPvJMEe.js"></script>
+  <script type="module" crossorigin src="/Wame/assets/index-DeeXmkGz.js"></script>
 </head>
+
 <body>
+  <!-- O contêiner principal da aplicação -->
   <div class="container">
     <header class="header">
       <div class="header-icon">
@@ -228,7 +385,6 @@
         <select id="countryCode" class="country-code">
           <!-- Códigos de país -->
           <option value="+55">🇧🇷 +55</option>
-          <!-- colocar uma linha para dar destaque ao brasil -->
           <option value="" disabled>─────────────────</option>
           <option value="+1">🇺🇸 +1</option>
           <option value="+61">🇦🇺 +61</option>
@@ -245,7 +401,8 @@
           <option value="+56">🇨🇱 +56</option>
           <option value="+598">🇺🇾 +598</option>
         </select>
-        <input id="phoneNumber" class="phone-input" type="tel" placeholder="11987654321" autocomplete="tel" pattern="[0-9]*" inputmode="numeric" />
+        <input id="phoneNumber" class="phone-input" type="tel" placeholder="11987654321" autocomplete="tel"
+          pattern="[0-9]*" inputmode="numeric" />
       </div>
       <p class="input-help">Digite o DDD + número</p>
     </div>
@@ -275,8 +432,18 @@
     </div>
   </div>
 
-  <!-- Script principal -->
+  <!-- Ponto de entrada do TypeScript -->
 
-  <!-- Register Service Worker -->
+  <!-- Registro do Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.ts')
+          .then(reg => console.log('SW registrado:', reg.scope))
+          .catch(err => console.error('Falha ao registrar SW:', err));
+      });
+    }
+  </script>
+
 </body>
 </html>
